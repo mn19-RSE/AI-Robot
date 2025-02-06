@@ -9,6 +9,7 @@
  */
 #include <SimpleFOC.h>
 
+
 // magnetic sensor instance - SPI
 MagneticSensorSPI sensor = MagneticSensorSPI(10, 14, 0x3FFF);
 // magnetic sensor instance - MagneticSensorI2C
@@ -16,12 +17,14 @@ MagneticSensorSPI sensor = MagneticSensorSPI(10, 14, 0x3FFF);
 // magnetic sensor instance - analog output
 // MagneticSensorAnalog sensor = MagneticSensorAnalog(A1, 14, 1020);
 
+
 // BLDC motor & driver instance
 BLDCMotor motor = BLDCMotor(7);                      // Phase resistance
 BLDCDriver3PWM driver = BLDCDriver3PWM(5, 4, 3, 2);  //IN1, IN2, IN3, ENABLE
 // Stepper motor & driver instance
 //StepperMotor motor = StepperMotor(50);
 //StepperDriver4PWM driver = StepperDriver4PWM(9, 5, 10, 6,  8);
+
 
 // angle set point variable
 float target_angle = 0;
@@ -32,7 +35,9 @@ void doTarget(char* cmd) {
 }
 unsigned long lastPrintTime = 0;
 
+
 void setup() {
+
 
   // use monitoring with serial
   Serial.begin(115200);
@@ -40,12 +45,16 @@ void setup() {
   // comment out if not needed
   SimpleFOCDebug::enable(&Serial);
 
+
   // initialise magnetic sensor hardware
   sensor.init();
 
 
+
+
   // link the motor to the sensor
   motor.linkSensor(&sensor);
+
 
   // driver config
   // power supply voltage [V]
@@ -54,33 +63,42 @@ void setup() {
   // link the motor and the driver
   motor.linkDriver(&driver);
 
+
   // choose FOC modulation (optional)
   motor.foc_modulation = FOCModulationType::SpaceVectorPWM;
+
 
   // set motion control loop to be used
   motor.controller = MotionControlType::angle;
 
+
   // contoller configuration
   // default parameters in defaults.h
+
 
   // velocity PI controller parameters
   motor.PID_velocity.P = 0.5f;
   motor.PID_velocity.I = 1;
   motor.PID_velocity.D = .05;
   // maximal voltage to be set to the motor
-  motor.voltage_limit = 5;
+  motor.voltage_limit = 6;
+
 
   // velocity low pass filtering time constant
   // the lower the less filtered
   motor.LPF_velocity.Tf = 0.05f;
 
+
   // angle P controller
   motor.P_angle.P = 50;
   // maximal velocity of the position control
-  motor.velocity_limit = 20;
+  motor.velocity_limit = 100;
+
 
   // comment out if not needed
   motor.useMonitoring(Serial);
+
+
 
 
   // initialize motor
@@ -88,8 +106,10 @@ void setup() {
   // align sensor and start FOC
   motor.initFOC();
 
+
   // add target command T
   command.add('T', doTarget, "target angle");
+
 
   Serial.println(F("Motor ready."));
   Serial.println(F("Set the target angle using serial terminal:"));
@@ -97,12 +117,16 @@ void setup() {
 }
 
 
+
+
 void loop() {
-    if (millis() - lastPrintTime > 200) {  // Print every 200ms
+    if (millis() - lastPrintTime > 2000) {  // Print every 2000ms
         Serial.print("Angle: ");
         Serial.println(sensor.getAngle());
         lastPrintTime = millis();
     }
+
+
 
 
   // main FOC algorithm function
@@ -111,6 +135,7 @@ void loop() {
   // Bluepill loop ~10kHz
   motor.loopFOC();
 
+
   // Motion control function
   // velocity, position or voltage (defined in motor.controller)
   // this function can be run at much lower frequency than loopFOC() function
@@ -118,9 +143,12 @@ void loop() {
   motor.move(target_angle);
 
 
+
+
   // function intended to be used with serial plotter to monitor motor variables
   // significantly slowing the execution down!!!!
   // motor.monitor();
+
 
   // user communication
   command.run();
