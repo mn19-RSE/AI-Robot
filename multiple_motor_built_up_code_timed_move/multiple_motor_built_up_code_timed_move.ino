@@ -10,14 +10,14 @@
 #define motor2_V_limit 8
 
 BLDCMotor motor1 = BLDCMotor(7);                      //motor phase resistance
-BLDCDriver3PWM driver1 = BLDCDriver3PWM(0, 1, 2, 3);  //driver IN1, IN2, IN3, EN pin connections to MCU
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(22, 21, 20, 23);  //driver IN1, IN2, IN3, EN pin connections to MCU
 
-MagneticSensorSPI sensor1 = MagneticSensorSPI(14, 14, 0x3FFF);
+MagneticSensorSPI sensor1 = MagneticSensorSPI(32, 14, 0x3FFF);
 
 
 BLDCMotor motor2 = BLDCMotor(7);                      //motor phase resistance
-BLDCDriver3PWM driver2 = BLDCDriver3PWM(7, 6, 5, 4);  //driver IN1, IN2, IN3, EN pin connections to MCU
-MagneticSensorSPI sensor2 = MagneticSensorSPI(10, 14, 0x3FFF);
+BLDCDriver3PWM driver2 = BLDCDriver3PWM(18, 17, 16, 19);  //driver IN1, IN2, IN3, EN pin connections to MCU
+MagneticSensorSPI sensor2 = MagneticSensorSPI(31, 14, 0x3FFF);
 
 
 
@@ -26,8 +26,8 @@ int i = 0;
 
 
 void setup() {
-  pinMode(23, OUTPUT);  //using pin 23 as another 3.3V source for the motor driver
-  digitalWrite(23, HIGH);
+  pinMode(36, OUTPUT);  //using pin 23 as another 3.3V source for the motor driver
+  digitalWrite(36, HIGH);
   Serial.begin(115200);             // use monitoring with serial
   SimpleFOCDebug::enable(&Serial);  // enable more verbose output for debugging
   motor1.useMonitoring(Serial);
@@ -90,12 +90,12 @@ void setup() {
   _delay(500);
 }
 
-float pos1 = 20;  // previously: 6.28, 5, 2, -2, 5, 12, -3, -8, -5, 1, 10
-float pos2 = -20;  // previously 3.14, 4, 1, -1, 4, 10, -2, -10, -4, 0, -10
+float pos1 = 2;  // previously: 6.28, 5, 2, -2, 5, 12, -3, -8, -5, 1, 10
+float pos2 = -2;  // previously 3.14, 4, 1, -1, 4, 10, -2, -10, -4, 0, -10
 int loopTime = 5000;
 
-float motor_slow_speed = 90;
-float motor_quick_speed = 100;
+float motor_slow_speed = 15;
+float motor_quick_speed = 25;
 
 void loop() {
 

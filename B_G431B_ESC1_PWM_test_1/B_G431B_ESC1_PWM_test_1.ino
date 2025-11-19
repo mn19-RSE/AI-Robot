@@ -5,7 +5,7 @@
 #include <SimpleFOC.h>
 
 
-int PWM_PIN = 0;
+//int PWM_PIN = 6;  //The datasheet says “A” is PB6 (44), PWM input is PA15 (38). 
 
 // Motor instance
 BLDCMotor motor = BLDCMotor(11);
@@ -18,7 +18,7 @@ LowsideCurrentSense currentSense = LowsideCurrentSense(0.003f, -64.0f / 7.0f, A_
 // - _pinPWM:         the pin that is reading the pwm from magnetic sensor
 // - _min_raw_count:  the minimal length of the pulse (in microseconds)
 // - _max_raw_count:  the maximal length of the pulse (in microseconds)
-MagneticSensorPWM sensor = MagneticSensorPWM(PWM_PIN, 4, 904);
+MagneticSensorPWM sensor = MagneticSensorPWM(PB6, 2, 937);  //works with PB6 on this board
 void doPWM() {
   sensor.handlePWM();
 }
