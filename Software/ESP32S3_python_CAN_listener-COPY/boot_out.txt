@@ -1,0 +1,4 @@
+Adafruit CircuitPython 10.2.1 on 2026-05-13; Seeed Xiao ESP32-S3 Sense with ESP32S3
+Board ID:seeed_xiao_esp32_s3_sense
+UID:CDADC031B90E
+MAC:CC:77:CB:3F:E0:B4

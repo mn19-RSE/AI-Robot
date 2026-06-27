@@ -7,7 +7,8 @@ Intended for:
 */
 
 #include <SimpleFOC.h>
-MagneticSensorI2C sensor = MagneticSensorI2C(AS5600_I2C);
+// MagneticSensorI2C sensor = MagneticSensorI2C(AS5600_I2C);
+MagneticSensorSPI sensor = MagneticSensorSPI(D6, 14, 0x3FFF); // For AS5048A SPI board!!
 BLDCMotor motor = BLDCMotor(7);                          // configure motor pole pairs
 BLDCDriver3PWM driver = BLDCDriver3PWM(D3, D2, D1, D0);  // configure motor A, B, C, EN pins
 Commander command = Commander(Serial);                   // instatiate serial terminal commander
@@ -39,15 +40,15 @@ void setup() {
   //motor.controller = MotionControlType::velocity;
 
 
-  // PID parameters
+  // PID parameters 
   motor.PID_velocity.P = 0.5;
-  motor.PID_velocity.I = 20.0;
+  motor.PID_velocity.I = 25.0;
   motor.PID_velocity.D = 0.0;
   // motor.PID_velocity.output_ramp = 1000;
-  motor.voltage_limit = 6;       // max motor voltage before init
+  motor.voltage_limit = 2;       // max motor voltage before init
   motor.LPF_velocity.Tf = 0.8;  // velocity low pass filtering time constant, lower = less filtered
-  motor.P_angle.P = 10.0;         
-  motor.velocity_limit = 5;      // max velocity of position control
+  // motor.P_angle.P = 10.0;         
+  motor.velocity_limit = 20;      // max velocity of position control
 
 
   motor.useMonitoring(Serial);  // (optional)
@@ -65,6 +66,6 @@ void loop() {
   motor.loopFOC();
   motor.move(target_angle);
   // motor.move(1);  // use for velocity mode test
-  motor.monitor();  // serial plotter to monitor motor variables
+  // motor.monitor();  // serial plotter to monitor motor variables
   command.run();
 }
