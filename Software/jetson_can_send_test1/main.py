@@ -2,11 +2,14 @@
 
 import can
 
-bus = can.Bus(interface='socketcan', channel='can0')
+bus = can.interface.Bus(
+    channel='can0',
+    interface='socketcan'
+)
 
 msg = can.Message(
-    arbitration_id=0x201,
-    data=(123456).to_bytes(4, 'little', signed=True),
+    arbitration_id=0x123,
+    data=[0xAB,0xCD,0xAB,0xCD],
     is_extended_id=False
 )
 
