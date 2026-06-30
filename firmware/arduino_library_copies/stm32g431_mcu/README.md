@@ -1,0 +1,2 @@
+# STM32G431 MCU Header file library
+Pin definitions for the BLDC complete drive controller that uses the STM32G431 microcontorller. SPI pins, driver PWM and enebale pins, and the CAN pins are defined to make it easier to call functions in the .ino file. 
