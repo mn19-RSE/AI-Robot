@@ -3,18 +3,18 @@ Test for SimpleFOC control of multiple motors using a Teensy 4.1
 */
 
 #include <SimpleFOC.h>
-#define V_SUPPLY 12
-#define V_MOTOR 6
+#define V_SUPPLY 24
+#define V_MOTOR 2
 #define motor1_target 2
 #define motor2_target 2
 
 
-const int Sensor1_pin = 32;
-const int Sensor2_pin = 31;
-const int Sensor3_pin = 999;  //not connected
-const int Sensor4_pin = 30;
+const int Sensor1_pin = 6;
+const int Sensor2_pin = 10;
+// const int Sensor3_pin = 999;  //not connected
+// const int Sensor4_pin = 30;
 
-const int OC_ADJ = 36;  //analog driver current limit connected to all drivers
+// const int OC_ADJ = 36;  //analog driver current limit connected to all drivers
 
 /*
 MagneticSensorPWM sensor4 = MagneticSensorPWM(Sensor4_pin, 2, 937);
@@ -29,8 +29,8 @@ MagneticSensorSPI sensor2 = MagneticSensorSPI(Sensor2_pin, 14, 0x3FFF);
 BLDCMotor motor1 = BLDCMotor(7);  // Motor type and coil resistance
 BLDCMotor motor2 = BLDCMotor(7);
 
-BLDCDriver3PWM driver1 = BLDCDriver3PWM(22, 21, 20, 23);  //driver IN1, IN2, IN3, EN pin connections to MCU
-BLDCDriver3PWM driver2 = BLDCDriver3PWM(18, 17, 16, 19);
+BLDCDriver3PWM driver1 = BLDCDriver3PWM(2, 3, 4, 5);  //driver IN1, IN2, IN3, EN pin connections to MCU
+BLDCDriver3PWM driver2 = BLDCDriver3PWM(19, 22, 23, 18);
 
 
 float target_angle = 0;
@@ -44,9 +44,9 @@ void doTarget(char* cmd) {
 void setup() {
   Serial.begin(115200);
 
-  pinMode(OC_ADJ, OUTPUT);
+  // pinMode(OC_ADJ, OUTPUT);
   //analogWrite(OC_ADJ, 200); //Teensy4.x has PWM output 1 to 255
-  digitalWrite(OC_ADJ, LOW);
+  // digitalWrite(OC_ADJ, LOW);
   SimpleFOCDebug::enable(&Serial);  // enable more verbose output for debugging
   motor1.useMonitoring(Serial);
   motor2.useMonitoring(Serial);
@@ -81,6 +81,9 @@ void setup() {
   motor1.voltage_limit = V_MOTOR;
   motor2.voltage_limit = V_MOTOR;
 
+  motor1.velocity_limit = 50;
+  motor2.velocity_limit = 100;
+
   motor1.init();
   motor2.init();
 
@@ -95,8 +98,8 @@ void setup() {
 }
 
 void loop() {
-  motor1.loopFOC();
-  motor1.move(target_angle);
+  //motor1.loopFOC();
+  //motor1.move(target_angle);
 
   motor2.loopFOC();
   motor2.move(target_angle);
