@@ -3,7 +3,8 @@
 MagneticSensorSPI sensor = MagneticSensorSPI(D7, 14, 0x3FFF);  //test
 // MagneticSensorSPI sensor = MagneticSensorSPI(ENC_CS, 14, 0x3FFF);
 BLDCMotor motor = BLDCMotor(11);                          // configure motor pole pairs
-BLDCDriver3PWM driver = BLDCDriver3PWM(D2, D1, D0, D3);  //test
+
+BLDCDriver3PWM driver = BLDCDriver3PWM(A0, A1, A2, D3);  //test
 // BLDCDriver3PWM driver = BLDCDriver3PWM(MOTOR_INA, MOTOR_INB, MOTOR_INC, MOTOR_EN);  // configure motor A, B, C, EN pins
 Commander command = Commander(Serial);  // instatiate serial terminal commander
 float target_angle = 0;
@@ -15,6 +16,7 @@ void doTarget(char* cmd) {
 
 void setup() {
   Serial.begin(115200);
+  pinMode(D3, OUTPUT);
   // SPI.setSCLK(ENC_SCK);
   // SPI.setMISO(ENC_MISO);
   // SPI.setMOSI(ENC_MOSI);
